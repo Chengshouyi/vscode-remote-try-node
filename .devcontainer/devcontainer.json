@@ -4,7 +4,12 @@
 {
 	"name": "Node.js",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/javascript-node:0-18-bullseye",
+	"build": {
+		"dockerfile": "Dockerfile",
+		// Update 'VARIANT' to pick a Node.js version: 10, 12, 14, 16
+		"args": { "VARIANT": "16" }
+	},
+	// "image": "mcr.microsoft.com/devcontainers/javascript-node:0-18-bullseye",
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
@@ -14,6 +19,22 @@
 		// Configure properties specific to VS Code.
 		"vscode": {
 			"settings": {},
+			"features": {
+			    "docker-in-docker": {
+        		"version": "latest",
+        		"moby": true,
+        		"dockerDashComposeVersion": "v1"
+    			},
+				"common": {
+					"username": "automatic",
+					"uid": "automatic",
+					"gid": "automatic",
+					"installZsh": true,
+					"installOhMyZsh": true,
+					"upgradePackages": true,
+					"nonFreePackages": false
+				}
+			},
 			"extensions": [
 				"streetsidesoftware.code-spell-checker",
 				"ms-azuretools.vscode-docker",
@@ -35,7 +56,8 @@
 			"onAutoForward": "notify"
 		}
 	},
-
+	"runArgs": ["--init", "--privileged"],
+	"overrideCommand": false,
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"postCreateCommand": "yarn install"
 
